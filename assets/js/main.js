@@ -91,7 +91,102 @@ modalCloses.forEach((modalClose) => {
 })
 
 /*==================== PORTFOLIO SWIPER ====================*/
-
+let swiperPortfolio = new Swiper(".portfolio__container", {
+    cssMode: true,
+    loop: true,
+    navigation: {
+      nextEl: ".swiper-button-next",
+      prevEl: ".swiper-button-prev",
+    },
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true
+    },
+  });
 /*==================== TESTIMONIALS ====================*/
+let swiperTestimonial = new Swiper(".testimonial__container", {
+    loop: true,
+    grabCursor: true,
+    spaceBetween: 48,
 
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+      dynamicBullets: true
+    },
+
+    breakpoints:{
+        568:{
+            slidesPerView: 2,
+        }
+    }
+  });
+
+/*==================== SCROLL SECTIONS ACTIVE LINK ====================*/
+const sections = document.querySelectorAll('section[id]')
+
+function scrollActive(){
+    const scrollY = window.scrollY
+
+    sections.forEach(current => {
+        const sectionHeight = current.offsetHeight;
+        const sectionTop = current.offsetTop - 50;
+        const sectionId = current.getAttribute('id');
+        const link = document.querySelector('.nav__menu a[href="#' + sectionId + '"]');
+
+        if (
+            (scrollY >= sectionTop && scrollY <= sectionTop + sectionHeight) ||
+            (sectionId === 'home' && scrollY < 50) // Check if it's the "Home" section at the top
+        ) {
+            link.classList.add('active-link');
+        } else {
+            link.classList.remove('active-link');
+        }
+    });
+}
+window.addEventListener('scroll', scrollActive)
+
+/*==================== CHANGE BACKGROUND HEADER ====================*/ 
+function scrollHeader(){
+    const nav = document.getElementById('header')
+
+    if(this.scrollY >= 80) nav.classList.add('scroll-header'); else nav.classList.remove('scroll-header')
+}
+window.addEventListener('scroll', scrollHeader)
+/*==================== SHOW SCROLL UP ====================*/ 
+function scrollUp(){
+    const scrollUp = document.getElementById('scroll-up');
+
+    if(this.scrollY >= 560) scrollUp.classList.add('show-scroll'); else scrollUp.classList.remove('show-scroll');
+}
+window.addEventListener('scroll', scrollUp)
+/*==================== DARK LIGHT THEME ====================*/
+const themeButton = document.getElementById('theme-button')
+const darkTheme = 'dark-theme'
+const iconTheme = 'uil-sun'
+
+//Previously selected theme
+const selectedTheme = localStorage.getItem('selected-theme')
+const selectedIcon = localStorage.getItem('selected-icon')
+
+//Obtain current theme that the interface has by validating the dark-theme class
+const getCurrentTheme = () => document.body.classList.contains(darkTheme) ? 'dark' : 'light'
+const getCurrentIcon = () => themeButton.classList.contains(iconTheme) ? 'uil-moon' : 'uil-sun'
+
+//Validate if user previously chose a topic
+
+if(selectedTheme) {
+    //If the validation is fulfilled we ask what the issue was to know if we activated or deactivated the dark
+    document.body.classList[selectedTheme === 'dark' ? 'add' : 'remove'](darkTheme)
+    themeButton.classList[selectedIcon === 'uil-moon' ? 'add' : 'remove'](iconTheme)
+}
+
+themeButton.addEventListener('click', () => {
+//add or remove the dark / icon theme
+document.body.classList.toggle(darkTheme)
+themeButton.classList.toggle(iconTheme)
+
+localStorage.setItem('selected-theme', getCurrentTheme())
+localStorage.setItem('select-icon', getCurrentIcon())
+})
 //24:39 https://www.youtube.com/watch?v=27JtRAI3QO8&t=357s
